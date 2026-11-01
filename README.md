@@ -1,14 +1,12 @@
 # Frank Ruiz — portfolio
 
 Source for my portfolio site, live at https://portfolio.techwizardsaz.com:
-a RHEL 10 home server, a two-site Frigate camera NVR, an ESP8266 plant monitor,
-and incident write-ups from running all of it.
+a RHEL 10 home server, a two-site Frigate camera NVR and an ESP8266 plant monitor.
 
 Plain HTML and CSS, no build step, hosted on GitHub Pages.
 
 ```
-index.html              home page: rack drawing, projects, incident index, contact
-incidents.html          all postmortems, in date order
+index.html              home page: rack drawing, projects, skills, contact
 projects/               one page per project
 assets/site.css         every style for the site
 configs/                example configs from the builds (see configs/README.md)

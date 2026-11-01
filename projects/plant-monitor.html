@@ -19,7 +19,6 @@
     <a class="site-name" href="../index.html">Frank Ruiz</a>
     <nav class="site-nav" aria-label="Main">
       <a href="../index.html#projects">Projects</a>
-      <a href="../incidents.html">Incidents</a>
       <a href="../index.html#contact">Contact</a>
     </nav>
   </div>
@@ -33,10 +32,9 @@
       <p class="lead">A microcontroller in a plant pot that tells me when the soil is dry. It's the smallest device on my network, and it uses the same DNS, HTTPS and notification setup as everything else.</p>
       <dl class="facts">
         <dt>Board</dt><dd>ESP8266, programmed in the Arduino IDE</dd>
-        <dt>Sensor</dt><dd>Analog soil moisture probe on pin A0</dd>
-        <dt>Calibration</dt><dd>Raw 700 is dry, raw 300 is wet, below 40% means water it</dd>
+        <dt>Sensor</dt><dd>Analog soil moisture probe, calibrated against dry air and water</dd>
         <dt>Network</dt><dd>Static address, Pi-hole for DNS, HTTPS through Caddy on the home server</dd>
-        <dt>Alerts</dt><dd>ntfy push at 08:00, 12:00 and 20:00</dd>
+        <dt>Alerts</dt><dd>ntfy push three times a day</dd>
       </dl>
     </div>
 
@@ -44,49 +42,17 @@
       <section aria-labelledby="how">
         <h2 id="how">How it works</h2>
         <ul>
-          <li>On boot, it joins Wi-Fi with a fixed address, syncs the clock over NTP, and starts a web server on port 80.</li>
-          <li>Opening the page reads the sensor and returns the moisture percentage and whether the plant needs water.</li>
-          <li>Every five minutes, the loop takes a reading. When the hour matches one of the three alert times, it posts the reading to ntfy once.</li>
-          <li>The ESP8266 only speaks plain HTTP. Caddy on the home server puts HTTPS in front of it, like every other <code>.lan</code> name.</li>
-        </ul>
-<pre><code>void handleRoot() {
-  int raw = analogRead(A0);
-  int percent = constrain(map(raw, DRY_VALUE, WET_VALUE, 0, 100), 0, 100);
-  String status = (percent &lt; THRESHOLD) ? "needs water" : "OK";
-  server.send(200, "text/plain",
-              "Moisture: " + String(percent) + "% (" + status + ")");
-}</code></pre>
-      </section>
-
-      <section aria-labelledby="bug">
-        <h2 id="bug">The bug: a web server that never started</h2>
-        <p>After flashing, the board answered pings but refused HTTP connections. The serial monitor showed it connected to Wi-Fi and then went silent.</p>
-        <p>The cause was the NTP wait in <code>setup()</code>. It looped until the clock was set, and <code>server.begin()</code> came after it. If NTP was slow or blocked, the loop never ended and the server never started. Capping the wait at 20 tries (10 seconds) fixed it. The page now comes up even if time sync fails, and the scheduled alerts start working once the clock catches up.</p>
-<pre><code>configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-time_t now = time(nullptr);
-int attempts = 0;
-while (now &lt; 100000 &amp;&amp; attempts &lt; 20) {   // was: wait forever
-  delay(500);
-  now = time(nullptr);
-  attempts++;
-}
-
-server.on("/", handleRoot);
-server.begin();</code></pre>
-      </section>
-
-      <section aria-labelledby="notes">
-        <h2 id="notes">Notes</h2>
-        <ul>
-          <li>The ntfy request uses <code>setInsecure()</code>, which skips certificate checks to save memory on the ESP8266. That's acceptable for a plant reading. I'd pin the certificate for anything sensitive.</li>
-          <li>The Wi-Fi credentials and ntfy topic live in a <code>secrets.h</code> file that isn't committed. The repository has a template.</li>
+          <li>On boot, it joins Wi-Fi, syncs its clock over NTP, and starts a small web server.</li>
+          <li>Opening its page shows the current moisture percentage and whether the plant needs water.</li>
+          <li>Every five minutes it takes a reading, and at the scheduled times it pushes that reading to my phone.</li>
+          <li>The board only speaks plain HTTP, so Caddy on the home server puts HTTPS in front of it like every other local service.</li>
         </ul>
       </section>
     </div>
 
     <nav class="next-prev" aria-label="More projects">
       <a href="frigate-nvr.html">Previous: Camera NVR</a>
-      <a href="../incidents.html">Next: Incident write-ups</a>
+      <a href="../index.html#projects">All projects</a>
     </nav>
   </div>
 </main>

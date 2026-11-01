@@ -19,7 +19,6 @@
     <a class="site-name" href="../index.html">Frank Ruiz</a>
     <nav class="site-nav" aria-label="Main">
       <a href="../index.html#projects">Projects</a>
-      <a href="../incidents.html">Incidents</a>
       <a href="../index.html#contact">Contact</a>
     </nav>
   </div>
@@ -32,96 +31,38 @@
       <h1>Camera NVR</h1>
       <p class="lead">Two Frigate installs that record continuously and detect people on local hardware. The goal was alerts I actually read: only people, only in the places that matter, and never for me.</p>
       <dl class="facts">
-        <dt>Software</dt><dd>Frigate in Docker, go2rtc restreaming, frigate-notify</dd>
-        <dt>Second site</dt><dd>Raspberry Pi&nbsp;5, Hailo-8L accelerator, Reolink cameras</dd>
+        <dt>Software</dt><dd>Frigate in Docker, go2rtc, frigate-notify, ntfy</dd>
+        <dt>Second site</dt><dd>Raspberry Pi&nbsp;5 with a Hailo-8L accelerator, Reolink cameras</dd>
         <dt>Home</dt><dd>Home server, Intel integrated graphics through OpenVINO, one Tapo camera</dd>
-        <dt>Alerts</dt><dd>Push notifications through ntfy</dd>
         <dt>Access</dt><dd>Caddy HTTPS on the LAN, Tailscale from anywhere</dd>
       </dl>
     </div>
 
     <div class="prose">
-      <section id="pi" aria-labelledby="pi-title">
-        <h2 id="pi-title">Second site: Raspberry Pi 5 with a Hailo-8L</h2>
-        <p>The Pi runs Frigate for a set of outdoor Reolink cameras. The Hailo-8L on the Pi's M.2 HAT does the object detection at about 10&nbsp;ms per inference, which leaves the Pi's CPU free for video.</p>
-        <p>Getting the accelerator working meant matching the Hailo kernel driver exactly to the HailoRT version bundled in the Frigate image. The <a href="../incidents.html#hailo-version-mismatch">first attempt</a> used the wrong one.</p>
-
-        <h3>Alerts only for zones that matter</h3>
-        <p>Cameras that can see the street turned every passerby into an alert. I drew zones in the Frigate UI around the areas I care about and made them required for alerts. People outside a zone are still recorded as detections, but they don't buzz my phone.</p>
-<pre><code>cameras:
-  front:
-    review:
-      alerts:
-        required_zones: [entry]   # outside this zone: detection, not alert</code></pre>
-
-        <h3>Keeping a headless box healthy</h3>
+      <section aria-labelledby="does">
+        <h2 id="does">What it does</h2>
         <ul>
-          <li>A root cron job runs a full upgrade every morning and reboots only when a newer kernel of the same flavor is installed.</li>
-          <li>The kernel packages are on hold, because the Hailo driver is built against one specific kernel. Kernel updates are a manual step: upgrade, rebuild the driver, reboot, check. I learned this <a href="../incidents.html#kernel-update">the hard way</a>.</li>
-          <li>Shutdown and halt are redirected to reboot, the hardware watchdog resets the Pi if systemd hangs for 15 seconds, and a kernel panic reboots after 10 seconds. The Pi has no screen or keyboard, so it has to recover on its own.</li>
-          <li>Caddy serves Frigate over HTTPS with its own private CA, given a unique name so it can't collide with the home server's. That <a href="../incidents.html#same-name-ca">mattered</a>.</li>
+          <li>Records every camera around the clock and detects people without any cloud service.</li>
+          <li>Sends an alert only when a person enters a zone I've drawn, so passersby on the street don't buzz my phone.</li>
+          <li>Recognizes my face and skips alerts for me.</li>
+          <li>Pushes one notification per alert through ntfy, with a link that opens the clip over HTTPS.</li>
         </ul>
-<pre><code># poweroff and halt become reboot
-sudo ln -sf /usr/lib/systemd/system/reboot.target /etc/systemd/system/poweroff.target
-sudo ln -sf /usr/lib/systemd/system/reboot.target /etc/systemd/system/halt.target
-
-# hardware watchdog and reboot on panic
-sudo sed -i 's/^#\?RuntimeWatchdogSec=.*/RuntimeWatchdogSec=15s/' /etc/systemd/system.conf
-echo 'kernel.panic = 10' | sudo tee /etc/sysctl.d/99-reboot-on-panic.conf</code></pre>
       </section>
 
-      <section id="home" aria-labelledby="home-title">
-        <h2 id="home-title">Home: OpenVINO on the home server</h2>
-        <p>The second install watches my studio with a Tapo camera. There's no accelerator in this box, so detection runs on the Intel integrated GPU through OpenVINO, using a YOLOv9-tiny model at 320&times;320. I built the ONNX model myself with the export Dockerfile from Frigate's docs, after fixing a step that failed to fetch the source.</p>
+      <section aria-labelledby="built">
+        <h2 id="built">How it's built</h2>
+        <h3>Second site: Raspberry Pi 5 with a Hailo-8L</h3>
         <ul>
+          <li>The Hailo-8L accelerator runs detection at about 10&nbsp;ms per frame, leaving the Pi's CPU free for video.</li>
+          <li>The Hailo driver is matched to the HailoRT version inside the Frigate image, and the kernel is held so updates can't break it.</li>
+          <li>Daily automatic updates, a hardware watchdog and reboot-on-panic keep the headless Pi recovering on its own.</li>
+        </ul>
+        <h3>Home: OpenVINO on the home server</h3>
+        <ul>
+          <li>Detection runs on the Intel integrated GPU through OpenVINO, using a YOLOv9-tiny model I exported to ONNX myself.</li>
           <li>go2rtc keeps one connection to the camera and restreams it. Frigate records the main stream and detects on the substream.</li>
-          <li>Video decoding uses VAAPI on the iGPU, so the CPU stays mostly idle.</li>
-          <li>Motion masks cover the camera's timestamp overlay, which otherwise counts as motion every second.</li>
-          <li>Only people inside a doorway zone become alerts.</li>
+          <li>VAAPI decoding on the iGPU keeps the CPU mostly idle, and motion masks hide the camera's timestamp overlay.</li>
         </ul>
-<pre><code>detectors:
-  ov:
-    type: openvino
-    device: GPU
-
-model:
-  model_type: yolo-generic
-  path: /config/model_cache/yolov9-t-320.onnx
-  width: 320
-  height: 320
-  input_tensor: nchw
-  input_dtype: float
-  labelmap_path: /labelmap/coco-80.txt
-
-ffmpeg:
-  hwaccel_args: preset-vaapi</code></pre>
-
-        <h3>Ignoring myself</h3>
-        <p>The camera covers my workspace, so I'm in frame all day. Frigate's face recognition is on, and when it recognizes me it adds my name as a sub-label. The notifier drops any alert carrying that sub-label.</p>
-      </section>
-
-      <section aria-labelledby="notify-title">
-        <h2 id="notify-title">Notifications</h2>
-        <p>frigate-notify polls each Frigate's API every 15 seconds in reviews mode, so it only sees finished alerts, not every detection. It sends one push per alert to ntfy. Each site uses its own random topic name, which works like a password, and links back to Frigate over HTTPS so tapping a notification opens the clip.</p>
-<pre><code>app:
-  mode: reviews
-frigate:
-  server: http://frigate:5000
-  public_url: https://frigate.lan
-  webapi:
-    enabled: true
-    interval: 15
-alerts:
-  general:
-    notify_once: true
-  labels:
-    allow: [person]
-  sublabels:
-    block: [Frank]
-  ntfy:
-    enabled: true
-    server: https://ntfy.sh
-    topic: REPLACE-WITH-A-LONG-RANDOM-TOPIC</code></pre>
       </section>
     </div>
 

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Frank Ruiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Frank Ruiz: self-hosted infrastructure, a two-site camera NVR, and incident write-ups from a working homelab.">
+<meta name="description" content="Frank Ruiz: self-hosted infrastructure, a two-site camera NVR, and a RHEL 10 home server.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,6 @@
     <a class="site-name" href="index.html">Frank Ruiz</a>
     <nav class="site-nav" aria-label="Main">
       <a href="#projects">Projects</a>
-      <a href="incidents.html">Incidents</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -30,7 +29,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <h1 id="hero-name">Frank Ruiz</h1>
-        <p class="lead">I run my own infrastructure at home and at a second site: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera system with on-device object detection, and a few sensors. I document what I build and write up what breaks.</p>
+        <p class="lead">I run my own infrastructure at home and at a second site: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera system with on-device object detection, and a few sensors. I document everything I build.</p>
         <p class="sub">I'm practicing for the RHCSA on the same server I use every day, so the lab and the production box are one machine.</p>
         <ul class="contact-links">
           <li><a href="mailto:futureitwizardfrank@gmail.com">Email</a></li>
@@ -65,13 +64,13 @@
           </li>
           <li class="unit-slot">
             <span class="u-num" aria-hidden="true">3</span>
-            <a class="unit" href="incidents.html#usb-drive-drops">
+            <a class="unit" href="projects/home-server.html">
               <span class="led" aria-hidden="true"></span>
               <span class="unit-body">
                 <span class="tape">8&nbsp;TB Barracuda</span>
                 <span class="unit-desc">USB enclosure. Media, file sync data, VM disks.</span>
               </span>
-              <span class="unit-more">Incident</span>
+              <span class="unit-more">Build notes</span>
             </a>
           </li>
           <li class="unit-slot">
@@ -128,7 +127,7 @@
             <p class="project-host">RHEL&nbsp;10, since September 2023</p>
           </div>
           <div class="project-body">
-            <p>A RHEL&nbsp;10 server running about a dozen containers, each on its own LAN address through a macvlan network. Pi-hole answers DNS for local <code>.lan</code> names, and Caddy serves every service over HTTPS with certificates from a private CA. I built it on Ubuntu, then backed everything up and rebuilt it on RHEL in October so I'd use RHCSA skills daily.</p>
+            <p>A RHEL&nbsp;10 server running about a dozen containers, each on its own LAN address through a macvlan network. Pi-hole answers DNS for local <code>.lan</code> names, and Caddy serves every service over HTTPS with certificates from a private CA. I moved it from Ubuntu to RHEL so I use RHCSA skills every day.</p>
             <p class="stack"><strong>Built with</strong> RHEL&nbsp;10, Docker Compose, Caddy, Pi-hole, macvlan, NetworkManager, firewalld, SELinux, KVM, Cockpit, Tailscale</p>
           </div>
         </li>
@@ -156,28 +155,6 @@
     </div>
   </section>
 
-  <section class="section" id="incidents" aria-labelledby="incidents-title">
-    <div class="wrap">
-      <h2 id="incidents-title">Incident write-ups</h2>
-      <p class="section-intro">When something breaks, I write down what happened, why, how I fixed it, and what I changed so it doesn't happen again. Most of what I know about these systems came from these.</p>
-      <div class="table-scroll">
-        <table class="incident-table">
-          <thead>
-            <tr><th scope="col">Date</th><th scope="col">What broke</th><th scope="col">Root cause</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><time datetime="2026-09-06">Sep 6, 2026</time></td><td><a href="incidents.html#hailo-version-mismatch">Pi detector won't start</a></td><td>Hailo kernel driver 4.23 against the 4.21 runtime inside Frigate</td></tr>
-            <tr><td><time datetime="2026-09-14">Sep 14, 2026</time></td><td><a href="incidents.html#static-ip">Server keeps its DHCP address</a></td><td>Two network managers configuring the same interface</td></tr>
-            <tr><td><time datetime="2026-09-27">Sep 27, 2026</time></td><td><a href="incidents.html#subnet-migrations">Containers unreachable after re-addressing</a></td><td>macvlan host isolation, misaligned routes, hard-coded IPs</td></tr>
-            <tr><td><time datetime="2026-10-10">Oct 10, 2026</time></td><td><a href="incidents.html#usb-drive-drops">Every .lan site down at once</a></td><td>USB drive reset under the UAS driver; Caddy's data lived on it</td></tr>
-            <tr><td><time datetime="2026-10-20">Oct 20, 2026</time></td><td><a href="incidents.html#rg-cpu">CPU pinned at 1,100%</a></td><td>Editor search following a symlink into 8&nbsp;TB of data</td></tr>
-            <tr><td><time datetime="2026-10-24">Oct 24, 2026</time></td><td><a href="incidents.html#kernel-update">Detection down after a nightly update</a></td><td>New kernel with no matching Hailo driver, plus two script bugs</td></tr>
-            <tr><td><time datetime="2026-10-25">Oct 25, 2026</time></td><td><a href="incidents.html#same-name-ca">Invalid certificate signature</a></td><td>Two private CAs with the same name</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
 
   <section class="section" id="skills" aria-labelledby="skills-title">
     <div class="wrap">
