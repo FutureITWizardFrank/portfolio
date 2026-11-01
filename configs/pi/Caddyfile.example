@@ -1,0 +1,16 @@
+# Pi Caddyfile (example). The global pki block gives this host's private CA its
+# own name; two Caddy servers with the default name caused "invalid signature".
+{
+    pki {
+        ca local {
+            name "Pi Local CA"
+            root_cn "Pi Local CA - Root"
+            intermediate_cn "Pi Local CA - Intermediate"
+        }
+    }
+}
+
+https://frigate.lan {
+    tls internal
+    reverse_proxy localhost:5000
+}

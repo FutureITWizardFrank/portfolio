@@ -1,0 +1,14 @@
+# Nightly image updates. The schedule is a 6-field cron (seconds first) and runs in UTC
+# unless TZ is set.
+services:
+  watchtower:
+    image: containrrr/watchtower:1.7.1
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_SCHEDULE: "0 0 3 * * *"
+      # Docker 29 rejects the old default client API version
+      DOCKER_API_VERSION: "1.44"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

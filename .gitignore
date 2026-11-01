@@ -1,0 +1,3 @@
+configs/esp8266/plant_monitor/secrets.h
+.env
+*.env

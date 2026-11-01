@@ -1,0 +1,16 @@
+# Raspberry Pi 5 + Hailo-8L: only people inside a zone become alerts.
+# Everyone else is still recorded as a detection. Camera and zone names are examples.
+detectors:
+  hailo8l:
+    type: hailo8l
+    device: PCIe
+
+cameras:
+  front:
+    review:
+      alerts:
+        required_zones: [entry]
+  side:
+    review:
+      alerts:
+        required_zones: [gate, path]

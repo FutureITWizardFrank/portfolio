@@ -1,0 +1,40 @@
+# /srv/docker/frigate/compose.yml (example addresses)
+services:
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    restart: unless-stopped
+    shm_size: "256mb"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128   # Intel iGPU for OpenVINO and VAAPI
+    environment:
+      TZ: ${TZ}                                   # from .env
+      FRIGATE_RTSP_USER: ${FRIGATE_RTSP_USER}     # from an uncommitted .env file
+      FRIGATE_RTSP_PASSWORD: ${FRIGATE_RTSP_PASSWORD}
+    volumes:
+      - ./config:/config
+      - /home/frigate/media:/media/frigate        # recordings on the internal NVMe
+      - type: tmpfs
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    networks:
+      default: {}
+      macvlan_net:
+        ipv4_address: 10.0.10.102
+
+  frigate-notify:
+    image: ghcr.io/0x2142/frigate-notify:latest
+    container_name: frigate-notify
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}                                   # from .env
+    volumes:
+      - ./notify/config.yml:/app/config.yml
+    depends_on:
+      - frigate
+
+networks:
+  default: {}
+  macvlan_net:
+    external: true

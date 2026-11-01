@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Frank Ruiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Frank Ruiz: self-hosted infrastructure, a two-site camera NVR, and incident write-ups from a working homelab.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Red+Hat+Text:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="index.html">Frank Ruiz</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#projects">Projects</a>
+      <a href="incidents.html">Incidents</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 id="hero-name">Frank Ruiz</h1>
+        <p class="lead">I run my own infrastructure at home and at a second site: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera system with on-device object detection, and a few sensors. I document what I build and write up what breaks.</p>
+        <p class="sub">I'm practicing for the RHCSA on the same server I use every day, so the lab and the production box are one machine.</p>
+        <ul class="contact-links">
+          <li><a href="mailto:futureitwizardfrank@gmail.com">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/futureitwizardfrank">LinkedIn</a></li>
+          <li><a href="https://github.com/FutureITWizardFrank">GitHub</a></li>
+        </ul>
+      </div>
+
+      <div class="racks">
+        <p class="rack-title" id="rack-home">Home</p>
+        <ol class="rack" aria-labelledby="rack-home">
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">6</span>
+            <div class="unit">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">ISP gateway</span>
+                <span class="unit-desc">Router and Wi-Fi. Behind carrier-grade NAT, so nothing is port-forwarded.</span>
+              </span>
+            </div>
+          </li>
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">4–5</span>
+            <a class="unit unit-2u" href="projects/home-server.html">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">home server</span>
+                <span class="unit-desc">HP EliteDesk 800 G6, Core i7, 32&nbsp;GB. RHEL&nbsp;10, Docker, KVM, Caddy, Pi-hole, Jellyfin, Seafile, Frigate.</span>
+              </span>
+              <span class="unit-more">Build notes</span>
+            </a>
+          </li>
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">3</span>
+            <a class="unit" href="incidents.html#usb-drive-drops">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">8&nbsp;TB Barracuda</span>
+                <span class="unit-desc">USB enclosure. Media, file sync data, VM disks.</span>
+              </span>
+              <span class="unit-more">Incident</span>
+            </a>
+          </li>
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">2</span>
+            <a class="unit" href="projects/plant-monitor.html">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">plant monitor</span>
+                <span class="unit-desc">ESP8266 soil moisture sensor with phone alerts.</span>
+              </span>
+              <span class="unit-more">Build notes</span>
+            </a>
+          </li>
+        </ol>
+
+        <p class="tunnel">Tailscale between sites</p>
+
+        <p class="rack-title" id="rack-remote">Second site</p>
+        <ol class="rack" aria-labelledby="rack-remote">
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">2</span>
+            <a class="unit" href="projects/frigate-nvr.html">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">NVR Pi</span>
+                <span class="unit-desc">Raspberry Pi&nbsp;5 with a Hailo-8L accelerator. Frigate NVR.</span>
+              </span>
+              <span class="unit-more">Build notes</span>
+            </a>
+          </li>
+          <li class="unit-slot">
+            <span class="u-num" aria-hidden="true">1</span>
+            <a class="unit" href="projects/frigate-nvr.html#pi">
+              <span class="led" aria-hidden="true"></span>
+              <span class="unit-body">
+                <span class="tape">Reolink cameras</span>
+                <span class="unit-desc">Outdoor cameras, alerts filtered by zone.</span>
+              </span>
+            </a>
+          </li>
+        </ol>
+        <p class="rack-caption">My equipment, drawn as a rack. Select a unit to read about it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects" aria-labelledby="projects-title">
+    <div class="wrap">
+      <h2 id="projects-title">Projects</h2>
+      <ul class="projects">
+        <li class="project">
+          <div>
+            <h3><a href="projects/home-server.html">Home server</a></h3>
+            <p class="project-host">RHEL&nbsp;10, since September 2026</p>
+          </div>
+          <div class="project-body">
+            <p>A RHEL&nbsp;10 server running about a dozen containers, each on its own LAN address through a macvlan network. Pi-hole answers DNS for local <code>.lan</code> names, and Caddy serves every service over HTTPS with certificates from a private CA. I built it on Ubuntu, then backed everything up and rebuilt it on RHEL in October so I'd use RHCSA skills daily.</p>
+            <p class="stack"><strong>Built with</strong> RHEL&nbsp;10, Docker Compose, Caddy, Pi-hole, macvlan, NetworkManager, firewalld, SELinux, KVM, Cockpit, Tailscale</p>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3><a href="projects/frigate-nvr.html">Camera NVR</a></h3>
+            <p class="project-host">Frigate at two sites</p>
+          </div>
+          <div class="project-body">
+            <p>Cameras with object detection that runs locally. A Raspberry Pi&nbsp;5 with a Hailo-8L handles the outdoor cameras at about 10&nbsp;ms per inference. A second instance on the home server runs a YOLOv9 model on the Intel iGPU through OpenVINO. Alerts fire only for people inside chosen zones, and my own face is filtered out before anything reaches my phone.</p>
+            <p class="stack"><strong>Built with</strong> Frigate, Hailo-8L, OpenVINO, YOLOv9, go2rtc, frigate-notify, ntfy, Caddy, Tailscale</p>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3><a href="projects/plant-monitor.html">Plant monitor</a></h3>
+            <p class="project-host">ESP8266</p>
+          </div>
+          <div class="project-body">
+            <p>An ESP8266 reads a soil moisture sensor, serves the reading on a small web page behind Caddy, and pushes a moisture check to my phone three times a day.</p>
+            <p class="stack"><strong>Built with</strong> ESP8266, Arduino, NTP, ntfy, Pi-hole, Caddy</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="incidents" aria-labelledby="incidents-title">
+    <div class="wrap">
+      <h2 id="incidents-title">Incident write-ups</h2>
+      <p class="section-intro">When something breaks, I write down what happened, why, how I fixed it, and what I changed so it doesn't happen again. Most of what I know about these systems came from these.</p>
+      <div class="table-scroll">
+        <table class="incident-table">
+          <thead>
+            <tr><th scope="col">Date</th><th scope="col">What broke</th><th scope="col">Root cause</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><time datetime="2026-09-06">Sep 6, 2026</time></td><td><a href="incidents.html#hailo-version-mismatch">Pi detector won't start</a></td><td>Hailo kernel driver 4.23 against the 4.21 runtime inside Frigate</td></tr>
+            <tr><td><time datetime="2026-09-14">Sep 14, 2026</time></td><td><a href="incidents.html#static-ip">Server keeps its DHCP address</a></td><td>Two network managers configuring the same interface</td></tr>
+            <tr><td><time datetime="2026-09-27">Sep 27, 2026</time></td><td><a href="incidents.html#subnet-migrations">Containers unreachable after re-addressing</a></td><td>macvlan host isolation, misaligned routes, hard-coded IPs</td></tr>
+            <tr><td><time datetime="2026-10-10">Oct 10, 2026</time></td><td><a href="incidents.html#usb-drive-drops">Every .lan site down at once</a></td><td>USB drive reset under the UAS driver; Caddy's data lived on it</td></tr>
+            <tr><td><time datetime="2026-10-20">Oct 20, 2026</time></td><td><a href="incidents.html#rg-cpu">CPU pinned at 1,100%</a></td><td>Editor search following a symlink into 8&nbsp;TB of data</td></tr>
+            <tr><td><time datetime="2026-10-24">Oct 24, 2026</time></td><td><a href="incidents.html#kernel-update">Detection down after a nightly update</a></td><td>New kernel with no matching Hailo driver, plus two script bugs</td></tr>
+            <tr><td><time datetime="2026-10-25">Oct 25, 2026</time></td><td><a href="incidents.html#same-name-ca">Invalid certificate signature</a></td><td>Two private CAs with the same name</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills" aria-labelledby="skills-title">
+    <div class="wrap">
+      <h2 id="skills-title">What I work with</h2>
+      <dl class="skills">
+        <div>
+          <dt>Linux</dt>
+          <dd>RHEL&nbsp;10, Ubuntu Server, Raspberry Pi OS. systemd, cron, journald, dnf, apt, subscription-manager.</dd>
+        </div>
+        <div>
+          <dt>Networking</dt>
+          <dd>NetworkManager and nmcli, systemd-networkd, macvlan, static addressing, Pi-hole DNS, Tailscale, WireGuard.</dd>
+        </div>
+        <div>
+          <dt>Containers</dt>
+          <dd>Docker Compose, external and per-stack networks, gluetun VPN sidecars, Portainer, Watchtower.</dd>
+        </div>
+        <div>
+          <dt>Security</dt>
+          <dd>firewalld, UFW, SELinux file contexts, Caddy with a private CA, basic auth, SSH keys.</dd>
+        </div>
+        <div>
+          <dt>Storage and VMs</dt>
+          <dd>ext4, LVM, fstab options, SMART checks, USB storage quirks, KVM and libvirt storage pools, Cockpit.</dd>
+        </div>
+        <div>
+          <dt>Edge video and hardware</dt>
+          <dd>Frigate, Hailo-8L, OpenVINO, VAAPI and Quick Sync, go2rtc, ESP8266 and Arduino.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="contact" aria-labelledby="contact-title">
+    <div class="wrap">
+      <h2 id="contact-title">Contact</h2>
+      <div class="contact-block">
+        <p class="email">futureitwizardfrank@gmail.com</p>
+        <p><a href="https://www.linkedin.com/in/futureitwizardfrank">LinkedIn</a> and <a href="https://github.com/FutureITWizardFrank">GitHub</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Plain HTML and CSS on GitHub Pages. Example configs from these builds are in the <a href="https://github.com/FutureITWizardFrank/portfolio/tree/main/configs">configs folder</a> of this site's repository.</p>
+  </div>
+</footer>
+
+</body>
+</html>

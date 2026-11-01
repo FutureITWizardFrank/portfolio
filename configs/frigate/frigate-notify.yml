@@ -1,0 +1,26 @@
+# frigate-notify: one push per finished alert, sent to ntfy
+app:
+  mode: reviews
+
+frigate:
+  server: http://frigate:5000          # on the Pi: http://host.docker.internal:5000
+  public_url: https://frigate.lan      # where a tapped notification opens
+  webapi:
+    enabled: true
+    interval: 15
+  mqtt:
+    enabled: false
+
+alerts:
+  general:
+    notify_once: true
+    recheck_delay: 10
+  labels:
+    allow: [person]
+  sublabels:
+    block: [Frank]                     # face recognition sub-label: don't alert on me
+
+  ntfy:
+    enabled: true
+    server: https://ntfy.sh
+    topic: REPLACE-WITH-A-LONG-RANDOM-TOPIC   # e.g. openssl rand -hex 12

@@ -1,0 +1,61 @@
+# /srv/docker/frigate/config/config.yml (example)
+# Camera credentials come from FRIGATE_RTSP_USER / FRIGATE_RTSP_PASSWORD env vars.
+mqtt:
+  enabled: false
+
+tls:
+  enabled: false   # Caddy terminates HTTPS
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+model:
+  model_type: yolo-generic
+  path: /config/model_cache/yolov9-t-320.onnx   # exported with the Dockerfile from Frigate's docs
+  width: 320
+  height: 320
+  input_tensor: nchw
+  input_dtype: float
+  labelmap_path: /labelmap/coco-80.txt
+
+ffmpeg:
+  hwaccel_args: preset-vaapi
+
+go2rtc:
+  streams:
+    tapo:
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@CAMERA_IP:554/stream1
+    tapo_sub:
+      - rtsp://{FRIGATE_RTSP_USER}:{FRIGATE_RTSP_PASSWORD}@CAMERA_IP:554/stream2
+
+cameras:
+  tapo:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/tapo
+          input_args: preset-rtsp-restream
+          roles: [record]
+        - path: rtsp://127.0.0.1:8554/tapo_sub
+          input_args: preset-rtsp-restream
+          roles: [detect]
+    detect:
+      enabled: true
+    record:
+      enabled: true
+    objects:
+      track: [person]
+    review:
+      alerts:
+        required_zones: [door]
+    zones:
+      door:
+        coordinates: 0.62,0.18,0.86,0.18,0.86,0.95,0.62,0.95   # drawn in the UI; example values
+    motion:
+      mask:
+        - 0.0,0.0,0.36,0.0,0.36,0.07,0.0,0.07                 # timestamp overlay; example values
+
+face_recognition:
+  enabled: true
+  model_size: large

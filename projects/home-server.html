@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home server · Frank Ruiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A RHEL 10 home server with Docker, macvlan, Pi-hole, and Caddy HTTPS on local names.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Red+Hat+Text:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="../index.html">Frank Ruiz</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="../index.html#projects">Projects</a>
+      <a href="../incidents.html">Incidents</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="article">
+  <div class="wrap">
+    <div class="article-head">
+      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / RHEL&nbsp;10</p>
+      <h1>Home server</h1>
+      <p class="lead">One small-form-factor PC that runs my DNS, media, file sync, camera NVR and RHEL practice VMs. Every service has its own address on my LAN and its own HTTPS name, and none of it is exposed to the internet.</p>
+      <dl class="facts">
+        <dt>Hardware</dt><dd>HP EliteDesk 800 G6, Core i7 vPro, 32&nbsp;GB RAM</dd>
+        <dt>Storage</dt><dd>500&nbsp;GB internal NVMe, 8&nbsp;TB Seagate Barracuda in a USB enclosure</dd>
+        <dt>OS</dt><dd>Red Hat Enterprise Linux 10, registered with subscription-manager</dd>
+        <dt>Runtime</dt><dd>Docker CE with Compose, KVM and libvirt, Cockpit</dd>
+        <dt>Network</dt><dd>One NIC with a static address, Tailscale for remote access</dd>
+      </dl>
+    </div>
+
+    <div class="prose">
+      <section aria-labelledby="timeline">
+        <h2 id="timeline">Timeline</h2>
+        <ol>
+          <li><strong>September 2026.</strong> Built on Ubuntu Server: Pi-hole, Jellyfin, Seafile and Caddy, each on its own macvlan address.</li>
+          <li><strong>September 27.</strong> Moved the server behind a second router on its own subnet.</li>
+          <li><strong>October 5.</strong> Formatted the 8&nbsp;TB drive and moved VM disks, ISOs and the media library onto it.</li>
+          <li><strong>October 6.</strong> Removed the second router and re-addressed everything back to the original subnet. Same day, backed up all Docker data to the 8&nbsp;TB drive and reinstalled the server as RHEL&nbsp;10.</li>
+          <li><strong>October 10–13.</strong> The USB drive dropped off the bus and took every HTTPS site with it. See the <a href="../incidents.html#usb-drive-drops">write-up</a>.</li>
+          <li><strong>October 20.</strong> Added Frigate with an OpenVINO detector on the iGPU.</li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="services">
+        <h2 id="services">Services</h2>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th scope="col">Service</th><th scope="col">What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Caddy</td><td>Reverse proxy. Serves every <code>.lan</code> name over HTTPS with a private CA.</td></tr>
+              <tr><td>Pi-hole v6</td><td>DNS for the whole LAN, ad blocking, local records for <code>.lan</code> names</td></tr>
+              <tr><td>Jellyfin</td><td>Media server with Intel Quick Sync transcoding</td></tr>
+              <tr><td>Seafile</td><td>File sync for my laptop and phone, with MariaDB and memcached</td></tr>
+              <tr><td>Frigate</td><td>NVR for the studio camera, see <a href="frigate-nvr.html#home">Camera NVR</a></td></tr>
+              <tr><td>Portainer</td><td>Container dashboard</td></tr>
+              <tr><td>Watchtower</td><td>Pulls new images nightly and cleans up old ones</td></tr>
+              <tr><td>Cockpit</td><td>Host management. A systemd service, not a container.</td></tr>
+              <tr><td>KVM and libvirt</td><td>RHEL VMs for RHCSA practice, disks on the 8&nbsp;TB drive</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section aria-labelledby="network">
+        <h2 id="network">How a request gets to a service</h2>
+        <figure>
+<pre><code>Laptop or phone
+  |  1. DNS lookup for jellyfin.lan
+  v
+Pi-hole (its own macvlan address)
+  |  answers with the server's address
+  v
+Server NIC
+  Caddy :443, certificate signed by the private CA
+  |  2. reverse_proxy over the shim
+  v
+macvlan-shim (a single /32 address on the host)
+  |  one /32 route per container
+  v
+Jellyfin   Seafile   Frigate   ...</code></pre>
+          <figcaption>Pi-hole points every .lan name at the host, and Caddy forwards each one to the right container.</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="decisions">
+        <h2 id="decisions">Decisions and tradeoffs</h2>
+
+        <h3>Each service gets its own LAN address</h3>
+        <p>Pi-hole needs ports 53 and 80, and other devices on the LAN should be able to reach a service directly. A Docker macvlan network gives each container a real address on the LAN, so ports never collide and every service shows up like its own device.</p>
+        <p>The catch is that Linux won't let a host talk to its own macvlan children through the parent interface. I fixed that with a small macvlan interface on the host, the shim, that has a single <code>/32</code> address and one <code>/32</code> route per container. It's a NetworkManager connection, so it comes back after reboots.</p>
+<pre><code># example addresses
+# the network containers attach to
+docker network create -d macvlan \
+  --subnet 10.0.10.0/24 --gateway 10.0.10.1 \
+  -o parent=eno1 macvlan_net
+
+# the host-side shim, persistent through NetworkManager
+sudo nmcli connection add type macvlan con-name macvlan-shim \
+  ifname macvlan-shim macvlan.parent eno1 macvlan.mode bridge \
+  ipv4.method manual ipv4.addresses 10.0.10.2/32
+sudo nmcli connection modify macvlan-shim \
+  +ipv4.routes "10.0.10.53/32" +ipv4.routes "10.0.10.80/32"
+sudo nmcli connection up macvlan-shim</code></pre>
+
+        <h3>HTTPS on names that only exist on my LAN</h3>
+        <p>Public certificates need a public domain and either an open port or a DNS API. I wanted neither for internal services, so Caddy runs its own certificate authority with <code>tls internal</code>, and Pi-hole resolves the <code>.lan</code> names. Each device trusts the root certificate once. To make that easy, Caddy also serves the root certificate as a download from a local address. Apps without their own login get Caddy's <code>basic_auth</code> in front of them.</p>
+<pre><code>https://jellyfin.lan {
+    tls internal
+    reverse_proxy 10.0.10.65:8096
+}
+
+http://ca.lan {
+    handle /ca.crt {
+        rewrite * /root.crt
+        root * /data/caddy/pki/authorities/local
+        header Content-Type application/x-x509-ca-cert
+        file_server
+    }
+    respond 404
+}</code></pre>
+
+        <h3>Config on the internal disk, bulk data on USB</h3>
+        <p>At first, everything lived on the 8&nbsp;TB USB drive, including Caddy's certificates. When the drive dropped off the bus, every site went down at once. I moved compose files and app state to <code>/srv/docker</code> on the internal NVMe, so only media, Seafile data and VM disks stay on the USB drive. The mount uses <code>nofail</code> so the server still boots if the drive is missing.</p>
+
+        <h3>Remote access without opening ports</h3>
+        <p>My ISP uses carrier-grade NAT, so port forwarding isn't an option anyway. Tailscale gives my laptop and phone a private path to the servers without exposing anything publicly.</p>
+
+        <h3>RHEL specifics</h3>
+        <ul>
+          <li>Static addressing is a NetworkManager profile, managed with <code>nmcli</code>.</li>
+          <li>firewalld allows only the services in use.</li>
+          <li>VM disks on the external drive needed an SELinux label before libvirt could use them.</li>
+          <li>Docker CE comes from Docker's RHEL repository. Podman is on my list to learn next.</li>
+        </ul>
+<pre><code>sudo semanage fcontext -a -t virt_image_t "/mnt/storage/vms(/.*)?"
+sudo restorecon -Rv /mnt/storage/vms
+sudo firewall-cmd --permanent --add-service={http,https}
+sudo firewall-cmd --reload</code></pre>
+      </section>
+
+      <section aria-labelledby="next">
+        <h2 id="next">Follow-ups</h2>
+        <ul class="followups">
+          <li><span class="status status-done">Done</span><span>Moved every stack to <code>/srv/docker</code> on the internal NVMe.</span></li>
+          <li><span class="status status-done">Done</span><span>Scheduled backups of <code>/srv/docker</code> and the Seafile library to the internal disk and off-site.</span></li>
+          <li><span class="status status-done">Done</span><span>Updated the runbook with Frigate, the USB fixes and the new paths.</span></li>
+        </ul>
+      </section>
+    </div>
+
+    <nav class="next-prev" aria-label="More projects">
+      <a href="../index.html#projects">All projects</a>
+      <a href="frigate-nvr.html">Next: Camera NVR</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Example configs for this build are in the <a href="https://github.com/FutureITWizardFrank/portfolio/tree/main/configs/home-server">repository</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>

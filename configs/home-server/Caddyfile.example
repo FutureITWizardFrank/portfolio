@@ -1,0 +1,60 @@
+# Home server Caddyfile (example addresses)
+# Every site uses Caddy's private CA. Pi-hole resolves each name to the host.
+
+https://pihole.lan {
+    tls internal
+    reverse_proxy 10.0.10.53:80
+}
+
+https://jellyfin.lan {
+    tls internal
+    reverse_proxy 10.0.10.65:8096
+}
+
+https://seafile.lan {
+    tls internal
+    reverse_proxy 10.0.10.30:80
+}
+
+https://frigate.lan {
+    tls internal
+    reverse_proxy 10.0.10.102:8971
+}
+
+# Cockpit runs on the host with its own self-signed certificate
+https://cockpit.lan {
+    tls internal
+    reverse_proxy https://localhost:9090 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}
+
+# The ESP8266 only speaks plain HTTP; Caddy adds HTTPS in front of it
+https://plant.lan {
+    tls internal
+    reverse_proxy http://10.0.10.184
+}
+
+# An app with no login of its own, bound to 127.0.0.1 and gated by basic auth.
+# Generate the hash with: docker exec caddy caddy hash-password
+https://app.lan {
+    tls internal
+    basic_auth {
+        USERNAME REPLACE-WITH-BCRYPT-HASH
+    }
+    reverse_proxy localhost:8080
+}
+
+# Serve the root certificate so a new device can trust the CA in one download
+http://ca.lan {
+    handle /ca.crt {
+        rewrite * /root.crt
+        root * /data/caddy/pki/authorities/local
+        header Content-Type application/x-x509-ca-cert
+        header Content-Disposition "attachment; filename=\"home-ca.crt\""
+        file_server
+    }
+    respond 404
+}
