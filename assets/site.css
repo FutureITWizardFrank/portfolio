@@ -168,7 +168,27 @@ p { margin: 0; }
 }
 .hero .lead { font-size: var(--step-1); line-height: 1.5; max-width: 34em; }
 .hero .sub { color: var(--muted); max-width: 36em; }
-.contact-links { display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 0; margin: 4px 0 0; list-style: none; }
+.hero .headline {
+  font-family: var(--font-display);
+  font-stretch: 85%;
+  font-weight: 700;
+  font-size: var(--step-2);
+  line-height: 1.2;
+  max-width: 26em;
+  margin-top: -6px;
+}
+.hero .sub strong { color: var(--ink); }
+.contact-links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding: 0; margin: 4px 0 0; list-style: none; }
+.btn {
+  display: inline-block;
+  background: var(--cable);
+  color: var(--wall);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+.btn:hover { text-decoration: underline; }
 
 /* ---------- The rack ---------- */
 .racks { display: grid; gap: 0; min-width: 0; max-width: 30rem; width: 100%; }
@@ -313,6 +333,16 @@ a.unit:focus-visible { outline-offset: 2px; }
 .project-body { display: grid; gap: 12px; max-width: var(--measure); min-width: 0; }
 .stack { font-size: var(--step--1); color: var(--muted); }
 .stack strong { color: var(--ink); font-weight: 700; }
+
+.duties { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; align-content: start; list-style-type: disc; }
+.duties li::marker { color: var(--muted); }
+
+/* ---------- Certifications ---------- */
+.creds { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; max-width: var(--measure); }
+.creds li { display: grid; gap: 2px 24px; padding-block: 12px; border-top: 1px solid var(--rule); }
+.creds li:first-child { border-top: 0; padding-top: 0; }
+.creds span { color: var(--muted); }
+@media (min-width: 640px) { .creds li { grid-template-columns: 16rem minmax(0, 1fr); } }
 
 /* ---------- Tables ---------- */
 .table-scroll { overflow-x: auto; max-width: 100%; }

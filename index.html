@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Frank Ruiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Frank Ruiz: a RHEL 10 home server, self-hosted apps, camera NVRs and an auto-watering plant monitor.">
+<meta name="description" content="Frank Ruiz: systems administration and IT infrastructure, 10+ years in enterprise IT. Experience, certifications, résumé, and homelab projects.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +19,9 @@
     <a class="site-name" href="index.html">Frank Ruiz</a>
     <nav class="site-nav" aria-label="Main">
       <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#certifications">Certifications</a>
+      <a href="assets/Frank_Ruiz_Resume.pdf">Résumé</a>
       <a href="#contact">Contact</a>
     </nav>
   </div>
@@ -29,9 +32,11 @@
     <div class="wrap">
       <div class="hero-copy">
         <h1 id="hero-name">Frank Ruiz</h1>
+        <p class="headline">Systems administration and IT infrastructure. 10+ years in enterprise IT.</p>
         <p class="lead">I run my own infrastructure at home: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera NVR and an auto-watering plant monitor. I also built and maintain an AI-accelerated camera system for a friend. I document everything I build.</p>
-        <p class="sub">I'm practicing for the RHCSA on the same server I use every day, so the lab and the production box are one machine.</p>
+        <p class="sub"><strong>Currently learning:</strong> RHCSA. I practice on the same RHEL server I use every day, so the lab and the production box are one machine.</p>
         <ul class="contact-links">
+          <li><a class="btn" href="assets/Frank_Ruiz_Resume.pdf" download>Download résumé (PDF)</a></li>
           <li><a href="mailto:futureitwizardfrank@gmail.com">Email</a></li>
           <li><a href="https://www.linkedin.com/in/futureitwizardfrank">LinkedIn</a></li>
           <li><a href="https://github.com/FutureITWizardFrank">GitHub</a></li>
@@ -175,11 +180,84 @@
     </div>
   </section>
 
+  <section class="section" id="experience" aria-labelledby="experience-title">
+    <div class="wrap">
+      <h2 id="experience-title">Experience</h2>
+      <p class="section-intro">Enterprise IT support and endpoint management for Windows and macOS users in banking and corporate environments. Bilingual in English and Spanish.</p>
+      <ul class="projects">
+        <li class="project">
+          <div>
+            <h3>Service Desk Analyst</h3>
+            <p class="project-host">First Republic Bank · New York, NY<br>2019–2023</p>
+          </div>
+          <div class="project-body">
+            <ul class="duties">
+              <li>Supported 9,600+ Windows and macOS users in a banking operation under strict SLAs.</li>
+              <li>Managed Active Directory accounts and Intune group assignments, deployed software with SCCM, and ran and adapted existing PowerShell for AD queries and reporting.</li>
+              <li>Led a ServiceNow knowledge base consolidation: audited, rewrote and standardized hundreds of articles and ticket templates.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3>Desktop Support Analyst</h3>
+            <p class="project-host">Solix Inc. · Parsippany, NJ<br>2016–2018</p>
+          </div>
+          <div class="project-body">
+            <ul class="duties">
+              <li>Supported 1,000+ users and built and maintained workstation images with Ivanti.</li>
+              <li>Administered Active Directory, Group Policy and Exchange mailboxes.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3>Network Technician (Contract)</h3>
+            <p class="project-host">Goldman Sachs HQ, via Greenlite Networks · New York, NY<br>2016</p>
+          </div>
+          <div class="project-body">
+            <ul class="duties">
+              <li>Racked Cisco routers and switches and worked overnight maintenance windows: repatching and floor-to-floor cable runs.</li>
+              <li>Installed, terminated and tested Cat5/6 structured cabling.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3>Advanced Repair Agent</h3>
+            <p class="project-host">Geek Squad, Best Buy · New Jersey<br>2014–2016</p>
+          </div>
+          <div class="project-body">
+            <ul class="duties">
+              <li>Diagnosed and repaired 20+ computers and devices a day: component-level hardware, OS installs and data migrations.</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="certifications" aria-labelledby="certifications-title">
+    <div class="wrap">
+      <h2 id="certifications-title">Certifications and education</h2>
+      <ul class="creds">
+        <li><strong>Jamf Certified Tech</strong> <span>Jamf Pro</span></li>
+        <li><strong>Jamf Certified Associate</strong> <span>Jamf Pro</span></li>
+        <li><strong>Jamf Certified Associate</strong> <span>Jamf Protect</span></li>
+        <li><strong>RHCSA</strong> <span>Red Hat Certified System Administrator, in progress</span></li>
+        <li><strong>IT Certificate</strong> <span>Mesa Community College, 2025–2026</span></li>
+      </ul>
+    </div>
+  </section>
 
   <section class="section" id="skills" aria-labelledby="skills-title">
     <div class="wrap">
       <h2 id="skills-title">What I work with</h2>
       <dl class="skills">
+        <div>
+          <dt>Endpoints and identity</dt>
+          <dd>Active Directory, Group Policy, Exchange, Intune, SCCM, Jamf Pro and Protect, Ivanti imaging, ServiceNow, PowerShell (running and adapting existing scripts).</dd>
+        </div>
         <div>
           <dt>Linux</dt>
           <dd>RHEL&nbsp;10, Ubuntu Server, Raspberry Pi OS. systemd, cron, journald, dnf, apt, subscription-manager, git.</dd>
