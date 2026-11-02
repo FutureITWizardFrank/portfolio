@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Camera NVR · Frank Ruiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Frigate NVR at two sites: Raspberry Pi 5 with a Hailo-8L, and an Intel iGPU with OpenVINO.">
+<meta name="description" content="Two Frigate NVRs: a Raspberry Pi 5 with a Hailo-8L built for a friend, and an Intel iGPU with OpenVINO at home.">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,10 +29,10 @@
     <div class="article-head">
       <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / Frigate</p>
       <h1>Camera NVR</h1>
-      <p class="lead">Two Frigate installs that record continuously and detect people on local hardware. The goal was alerts I actually read: only people, only in the places that matter, and never for me.</p>
+      <p class="lead">Two Frigate installs that record continuously and detect people on local hardware: one I built and maintain for a friend, and one at home. The goal was alerts I actually read: only people, only in the places that matter, and never for me.</p>
       <dl class="facts">
         <dt>Software</dt><dd>Frigate in Docker, go2rtc, frigate-notify, ntfy</dd>
-        <dt>Second site</dt><dd>Raspberry Pi&nbsp;5 with a Hailo-8L accelerator, Reolink cameras</dd>
+        <dt>Friend's site</dt><dd>Raspberry Pi&nbsp;5 with a Hailo-8L accelerator, Reolink cameras</dd>
         <dt>Home</dt><dd>Home server, Intel integrated graphics through OpenVINO, one Tapo camera</dd>
         <dt>Access</dt><dd>Caddy HTTPS on the LAN, Tailscale from anywhere</dd>
       </dl>
@@ -51,11 +51,11 @@
 
       <section aria-labelledby="built">
         <h2 id="built">How it's built</h2>
-        <h3>Second site: Raspberry Pi 5 with a Hailo-8L</h3>
+        <h3>For a friend: Raspberry Pi 5 with a Hailo-8L</h3>
         <ul>
           <li>The Hailo-8L accelerator runs detection at about 10&nbsp;ms per frame, leaving the Pi's CPU free for video.</li>
           <li>The Hailo driver is matched to the HailoRT version inside the Frigate image, and the kernel is held so updates can't break it.</li>
-          <li>Daily automatic updates, a hardware watchdog and reboot-on-panic keep the headless Pi recovering on its own.</li>
+          <li>Daily automatic updates, a hardware watchdog and reboot-on-panic keep the headless Pi recovering on its own, and I maintain it remotely over Tailscale.</li>
         </ul>
         <h3>Home: OpenVINO on the home server</h3>
         <ul>
@@ -68,7 +68,7 @@
 
     <nav class="next-prev" aria-label="More projects">
       <a href="home-server.html">Previous: Home server</a>
-      <a href="plant-monitor.html">Next: Plant monitor</a>
+      <a href="ironcard.html">Next: IronCard</a>
     </nav>
   </div>
 </main>

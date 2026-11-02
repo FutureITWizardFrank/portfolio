@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IronCard · Frank Ruiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="IronCard, a workout tracker built with Claude and self-hosted in Docker behind Caddy with HTTPS and a login.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Red+Hat+Text:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="../index.html">Frank Ruiz</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="article">
+  <div class="wrap">
+    <div class="article-head">
+      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / Self-hosted app</p>
+      <h1>IronCard</h1>
+      <p class="lead">A workout tracker web app I built with Claude as my coding partner, then deployed on the home server. I run it like a production app: it runs in a container, it's never exposed directly, and the only way in is over HTTPS with a login.</p>
+      <dl class="facts">
+        <dt>App</dt><dd>IronCard workout tracker, written with Claude, packaged as a Docker container</dd>
+        <dt>Host</dt><dd><a href="home-server.html">Home server</a>, RHEL&nbsp;10 with Docker Compose</dd>
+        <dt>Front door</dt><dd>Caddy reverse proxy with HTTPS and a password prompt</dd>
+        <dt>Access</dt><dd>On my LAN, and from my phone anywhere through Tailscale</dd>
+      </dl>
+    </div>
+
+    <div class="prose">
+      <section aria-labelledby="built">
+        <h2 id="built">How it's deployed</h2>
+        <ul>
+          <li><strong>Localhost only.</strong> The container publishes its port on <code>127.0.0.1</code>, not on the LAN, so nothing on the network can reach the app directly.</li>
+          <li><strong>One way in.</strong> Caddy is the only path to the app. It serves a local HTTPS name with a certificate from its private CA, like every other service on the server.</li>
+          <li><strong>A login in front.</strong> Caddy asks for a username and password before passing any request through. The password is stored as a bcrypt hash, never in plain text.</li>
+          <li><strong>Phone access without open ports.</strong> Tailscale lets me use it from my phone anywhere without exposing anything to the internet.</li>
+        </ul>
+        <figure>
+<pre><code>Phone (Tailscale) or laptop
+  |  HTTPS
+  v
+Caddy :443, private CA certificate
+  |  basic auth (bcrypt)
+  v
+IronCard container, 127.0.0.1 only</code></pre>
+          <figcaption>The app's port never leaves the host, so every request goes through Caddy.</figcaption>
+        </figure>
+      </section>
+    </div>
+
+    <nav class="next-prev" aria-label="More projects">
+      <a href="frigate-nvr.html">Previous: Camera NVR</a>
+      <a href="plant-monitor.html">Next: Plant monitor</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Example Caddy config, including the basic auth block, is in the <a href="https://github.com/FutureITWizardFrank/portfolio/tree/main/configs/home-server">repository</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Plant monitor · Frank Ruiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="An ESP8266 soil moisture monitor with a local web page and scheduled phone alerts.">
+<meta name="description" content="A plant monitor that grew from one ESP8266 sensor into an ESP32-C3 with four sensors and automatic watering.">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,39 +27,49 @@
 <main class="article">
   <div class="wrap">
     <div class="article-head">
-      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / ESP8266</p>
+      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / ESP32-C3</p>
       <h1>Plant monitor</h1>
-      <p class="lead">A microcontroller in a plant pot that tells me when the soil is dry. It's the smallest device on my network, and it uses the same DNS, HTTPS and notification setup as everything else.</p>
+      <p class="lead">It started as one sensor in one pot that told me when to water. Version&nbsp;2 watches four plants, reads the room's temperature and humidity, and waters them itself.</p>
       <dl class="facts">
-        <dt>Board</dt><dd>ESP8266, programmed in the Arduino IDE</dd>
-        <dt>Sensor</dt><dd>Analog soil moisture probe, calibrated against dry air and water</dd>
-        <dt>Network</dt><dd>Static address, Pi-hole for DNS, HTTPS through Caddy on the home server</dd>
-        <dt>Alerts</dt><dd>ntfy push three times a day</dd>
+        <dt>Board</dt><dd>ESP32-C3 SuperMini</dd>
+        <dt>Sensors</dt><dd>Four soil moisture sensors, a DHT22 for temperature and humidity</dd>
+        <dt>Watering</dt><dd>A relay switching a 12&nbsp;V water pump</dd>
+        <dt>Network</dt><dd>Local web page behind Caddy HTTPS, ntfy alerts to my phone</dd>
       </dl>
     </div>
 
     <div class="prose">
-      <section aria-labelledby="how">
-        <h2 id="how">How it works</h2>
+      <section id="v2" aria-labelledby="v2-title">
+        <h2 id="v2-title">Version 2: ESP32-C3 with auto-watering</h2>
         <ul>
-          <li>On boot, it joins Wi-Fi, syncs its clock over NTP, and starts a small web server.</li>
-          <li>Opening its page shows the current moisture percentage and whether the plant needs water.</li>
-          <li>Every five minutes it takes a reading, and at the scheduled times it pushes that reading to my phone.</li>
-          <li>The board only speaks plain HTTP, so Caddy on the home server puts HTTPS in front of it like every other local service.</li>
+          <li><strong>More inputs.</strong> The ESP8266 has a single analog input, so it could only read one soil sensor. The ESP32-C3 has several, enough for four.</li>
+          <li><strong>Climate readings.</strong> A DHT22 adds air temperature and humidity next to the soil readings.</li>
+          <li><strong>Automatic watering.</strong> The board drives a relay that switches a 12&nbsp;V pump, so the plants get water without me.</li>
+          <li><strong>Same plumbing as v1.</strong> It still serves a local web page and pushes alerts through ntfy, with Caddy on the home server adding HTTPS in front.</li>
+        </ul>
+      </section>
+
+      <section id="v1" aria-labelledby="v1-title">
+        <h2 id="v1-title">Version 1: ESP8266 with one sensor</h2>
+        <ul>
+          <li>An ESP8266 read one analog soil moisture probe, calibrated against dry air and water.</li>
+          <li>On boot it joined Wi-Fi, synced its clock over NTP, and started a small web server showing the moisture percentage.</li>
+          <li>Every five minutes it took a reading, and three times a day it pushed that reading to my phone.</li>
+          <li>Pi-hole gave it a local name, and Caddy put HTTPS in front of its plain-HTTP page.</li>
         </ul>
       </section>
     </div>
 
     <nav class="next-prev" aria-label="More projects">
-      <a href="frigate-nvr.html">Previous: Camera NVR</a>
-      <a href="../index.html#projects">All projects</a>
+      <a href="ironcard.html">Previous: IronCard</a>
+      <a href="portfolio-site.html">Next: This site</a>
     </nav>
   </div>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>The full sketch is in the <a href="https://github.com/FutureITWizardFrank/portfolio/tree/main/configs/esp8266">repository</a>.</p>
+    <p>The version&nbsp;1 sketch is in the <a href="https://github.com/FutureITWizardFrank/portfolio/tree/main/configs/esp8266">repository</a>.</p>
   </div>
 </footer>
 

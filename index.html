@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Frank Ruiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Frank Ruiz: self-hosted infrastructure, a two-site camera NVR, and a RHEL 10 home server.">
+<meta name="description" content="Frank Ruiz: a RHEL 10 home server, self-hosted apps, camera NVRs and an auto-watering plant monitor.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +29,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <h1 id="hero-name">Frank Ruiz</h1>
-        <p class="lead">I run my own infrastructure at home and at a second site: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera system with on-device object detection, and a few sensors. I document everything I build.</p>
+        <p class="lead">I run my own infrastructure at home: a RHEL&nbsp;10 server with about a dozen self-hosted services, a camera NVR and an auto-watering plant monitor. I also built and maintain an AI-accelerated camera system for a friend. I document everything I build.</p>
         <p class="sub">I'm practicing for the RHCSA on the same server I use every day, so the lab and the production box are one machine.</p>
         <ul class="contact-links">
           <li><a href="mailto:futureitwizardfrank@gmail.com">Email</a></li>
@@ -79,16 +79,16 @@
               <span class="led" aria-hidden="true"></span>
               <span class="unit-body">
                 <span class="tape">plant monitor</span>
-                <span class="unit-desc">ESP8266 soil moisture sensor with phone alerts.</span>
+                <span class="unit-desc">ESP32-C3, four soil sensors and an auto-watering pump.</span>
               </span>
               <span class="unit-more">Build notes</span>
             </a>
           </li>
         </ol>
 
-        <p class="tunnel">Tailscale between sites</p>
+        <p class="tunnel">Remote maintenance over Tailscale</p>
 
-        <p class="rack-title" id="rack-remote">Second site</p>
+        <p class="rack-title" id="rack-remote">Built and maintained for a friend</p>
         <ol class="rack" aria-labelledby="rack-remote">
           <li class="unit-slot">
             <span class="u-num" aria-hidden="true">2</span>
@@ -112,7 +112,7 @@
             </a>
           </li>
         </ol>
-        <p class="rack-caption">My equipment, drawn as a rack. Select a unit to read about it.</p>
+        <p class="rack-caption">My equipment, and the system I maintain for a friend, drawn as a rack. Select a unit to read about it.</p>
       </div>
     </div>
   </section>
@@ -134,21 +134,41 @@
         <li class="project">
           <div>
             <h3><a href="projects/frigate-nvr.html">Camera NVR</a></h3>
-            <p class="project-host">Frigate at two sites</p>
+            <p class="project-host">Frigate, at home and for a friend</p>
           </div>
           <div class="project-body">
-            <p>Cameras with object detection that runs locally. A Raspberry Pi&nbsp;5 with a Hailo-8L handles the outdoor cameras at about 10&nbsp;ms per inference. A second instance on the home server runs a YOLOv9 model on the Intel iGPU through OpenVINO. Alerts fire only for people inside chosen zones, and my own face is filtered out before anything reaches my phone.</p>
+            <p>Cameras with object detection that runs locally. For a friend, I built a Raspberry Pi&nbsp;5 NVR with a Hailo-8L that handles their outdoor cameras at about 10&nbsp;ms per inference, and I maintain it remotely. At home, a second instance runs a YOLOv9 model on the Intel iGPU through OpenVINO. Alerts fire only for people inside chosen zones, and my own face is filtered out before anything reaches my phone.</p>
             <p class="stack"><strong>Built with</strong> Frigate, Hailo-8L, OpenVINO, YOLOv9, go2rtc, frigate-notify, ntfy, Caddy, Tailscale</p>
           </div>
         </li>
         <li class="project">
           <div>
-            <h3><a href="projects/plant-monitor.html">Plant monitor</a></h3>
-            <p class="project-host">ESP8266</p>
+            <h3><a href="projects/ironcard.html">IronCard</a></h3>
+            <p class="project-host">Self-hosted app</p>
           </div>
           <div class="project-body">
-            <p>An ESP8266 reads a soil moisture sensor, serves the reading on a small web page behind Caddy, and pushes a moisture check to my phone three times a day.</p>
-            <p class="stack"><strong>Built with</strong> ESP8266, Arduino, NTP, ntfy, Pi-hole, Caddy</p>
+            <p>A workout tracker built with Claude, which I deploy and run as a container on the home server. Its port is bound to localhost only, so the only way in is through Caddy, which adds HTTPS and a login. I reach it from my phone over Tailscale.</p>
+            <p class="stack"><strong>Built with</strong> Docker Compose, Caddy, basic auth, private CA, Tailscale</p>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3><a href="projects/plant-monitor.html">Plant monitor</a></h3>
+            <p class="project-host">ESP32-C3, version&nbsp;2</p>
+          </div>
+          <div class="project-body">
+            <p>Started as an ESP8266 reading one soil sensor and pushing a moisture check to my phone. Version&nbsp;2 runs on an ESP32-C3 with four soil sensors, a temperature and humidity sensor, and a relay-driven pump that waters the plants automatically.</p>
+            <p class="stack"><strong>Built with</strong> ESP32-C3, ESP8266, DHT22, relay and 12&nbsp;V pump, Arduino, ntfy, Caddy</p>
+          </div>
+        </li>
+        <li class="project">
+          <div>
+            <h3><a href="projects/portfolio-site.html">This site</a></h3>
+            <p class="project-host">GitHub Pages</p>
+          </div>
+          <div class="project-body">
+            <p>Plain HTML and CSS published from a GitHub repository to a subdomain of my own domain, with DNS in AWS Route&nbsp;53. Built while learning git, and kept free of internal details.</p>
+            <p class="stack"><strong>Built with</strong> HTML, CSS, git, GitHub Pages, AWS Route&nbsp;53</p>
           </div>
         </li>
       </ul>
@@ -162,11 +182,11 @@
       <dl class="skills">
         <div>
           <dt>Linux</dt>
-          <dd>RHEL&nbsp;10, Ubuntu Server, Raspberry Pi OS. systemd, cron, journald, dnf, apt, subscription-manager.</dd>
+          <dd>RHEL&nbsp;10, Ubuntu Server, Raspberry Pi OS. systemd, cron, journald, dnf, apt, subscription-manager, git.</dd>
         </div>
         <div>
           <dt>Networking</dt>
-          <dd>NetworkManager and nmcli, systemd-networkd, macvlan, static addressing, Pi-hole DNS, Tailscale, WireGuard.</dd>
+          <dd>NetworkManager and nmcli, systemd-networkd, macvlan, static addressing, Pi-hole DNS, AWS Route&nbsp;53, Tailscale, WireGuard.</dd>
         </div>
         <div>
           <dt>Containers</dt>
@@ -182,7 +202,7 @@
         </div>
         <div>
           <dt>Edge video and hardware</dt>
-          <dd>Frigate, Hailo-8L, OpenVINO, VAAPI and Quick Sync, go2rtc, ESP8266 and Arduino.</dd>
+          <dd>Frigate, Hailo-8L, OpenVINO, VAAPI and Quick Sync, go2rtc, ESP32-C3, ESP8266 and Arduino.</dd>
         </div>
       </dl>
     </div>

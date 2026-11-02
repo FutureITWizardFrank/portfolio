@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>This site · Frank Ruiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="How this portfolio is built and hosted: static HTML on GitHub Pages, a custom subdomain in AWS Route 53, and git.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Red+Hat+Text:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="../index.html">Frank Ruiz</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="article">
+  <div class="wrap">
+    <div class="article-head">
+      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / GitHub Pages</p>
+      <h1>This site</h1>
+      <p class="lead">The page you're reading. I built it to show my homelab work, and used it to learn git, GitHub Pages and DNS for a domain I own.</p>
+      <dl class="facts">
+        <dt>Stack</dt><dd>Plain HTML and one CSS file, no framework or build step</dd>
+        <dt>Hosting</dt><dd>GitHub Pages, deployed on every push to <code>main</code></dd>
+        <dt>Domain</dt><dd>Subdomain of techwizardsaz.com, DNS in AWS Route&nbsp;53</dd>
+        <dt>Source</dt><dd><a href="https://github.com/FutureITWizardFrank/portfolio">github.com/FutureITWizardFrank/portfolio</a></dd>
+      </dl>
+    </div>
+
+    <div class="prose">
+      <section aria-labelledby="built">
+        <h2 id="built">How it's built</h2>
+        <ul>
+          <li><strong>Simple on purpose.</strong> Static pages with light and dark themes that work on a phone. There is no server software to patch.</li>
+          <li><strong>Git workflow.</strong> I edit locally, preview with a one-line Python web server, then commit and push. GitHub Pages publishes the change in about a minute.</li>
+          <li><strong>Custom domain.</strong> A CNAME record in Route&nbsp;53 points the subdomain at GitHub Pages, and GitHub issues the HTTPS certificate. The root domain stays free for a future business site.</li>
+          <li><strong>DNS troubleshooting.</strong> When GitHub's DNS check failed, I used <code>dig</code> against public resolvers to trace it to a missing record in Route&nbsp;53. After I added it, my own Pi-hole was still caching the old "doesn't exist" answer.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="public">
+        <h2 id="public">Keeping it public-safe</h2>
+        <ul>
+          <li>Example configs use made-up addresses and generic names. No real IPs, hostnames or camera locations.</li>
+          <li>Secrets live in environment variables or uncommitted files, never in the repository.</li>
+          <li>Commits use GitHub's private noreply email. I reset the history once so early drafts with more detail are gone.</li>
+        </ul>
+      </section>
+    </div>
+
+    <nav class="next-prev" aria-label="More projects">
+      <a href="plant-monitor.html">Previous: Plant monitor</a>
+      <a href="../index.html#projects">All projects</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>The full source is on <a href="https://github.com/FutureITWizardFrank/portfolio">GitHub</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>
