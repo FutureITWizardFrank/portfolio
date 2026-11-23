@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR dog tag · Frank Ruiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A phone-first contact page behind a QR code on my dog's tag: static HTML on GitHub Pages, its own subdomain in AWS Route 53.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&amp;family=Red+Hat+Text:ital,wght@0,400;0,700;1,400&amp;family=Red+Hat+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="site-name" href="../index.html">Frank Ruiz</a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main class="article">
+  <div class="wrap">
+    <div class="article-head">
+      <p class="breadcrumb"><a href="../index.html#projects">Projects</a> / GitHub Pages</p>
+      <h1>QR dog tag</h1>
+      <p class="lead">A contact page for my dog Teddy's tag. Whoever finds him scans the QR code and can call or text me with one tap.</p>
+      <dl class="facts">
+        <dt>Stack</dt><dd>One HTML file with inline CSS, no framework or build step</dd>
+        <dt>Hosting</dt><dd>GitHub Pages, from its own repository</dd>
+        <dt>Domain</dt><dd>Its own subdomain of techwizardsaz.com, DNS in AWS Route&nbsp;53</dd>
+        <dt>QR code</dt><dd>Generated with Python's <code>qrcode</code> library at the highest error correction level</dd>
+      </dl>
+    </div>
+
+    <div class="prose">
+      <section aria-labelledby="built">
+        <h2 id="built">How it's built</h2>
+        <ul>
+          <li><strong>Phone first.</strong> Big Call and Text buttons use <code>tel:</code> and <code>sms:</code> links, and the text opens with a message already started, so a stranger needs no instructions.</li>
+          <li><strong>A URL I control.</strong> The QR code points at my own subdomain, not a QR service that can expire or start charging. I can change the page, or move its hosting, without reprinting the tag.</li>
+          <li><strong>Built to survive a collar.</strong> The highest error correction level lets the code still scan when part of it is scratched.</li>
+          <li><strong>Same workflow as this site.</strong> A CNAME record in Route&nbsp;53 points the subdomain at GitHub Pages. Updates are a commit and a push.</li>
+          <li><strong>DNS troubleshooting.</strong> The new subdomain loaded on my phone over cellular but not on home Wi-Fi. That pointed to a cached "doesn't exist" answer on my own network rather than a problem in Route&nbsp;53, and flushing the cache fixed it.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="public">
+        <h2 id="public">Keeping it public-safe</h2>
+        <ul>
+          <li>The page shows only what a finder needs to reach me.</li>
+          <li>A <code>noindex</code> tag keeps it out of search engines. It's meant to be reached by scanning the tag.</li>
+        </ul>
+      </section>
+    </div>
+
+    <nav class="next-prev" aria-label="More projects">
+      <a href="plant-monitor.html">Previous: Plant monitor</a>
+      <a href="portfolio-site.html">Next: This site</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>The full source is on <a href="https://github.com/FutureITWizardFrank/portfolio">GitHub</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>
