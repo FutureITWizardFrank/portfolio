@@ -43,82 +43,30 @@
         </ul>
       </div>
 
-      <div class="racks">
-        <p class="rack-title" id="rack-home">Home</p>
-        <ol class="rack" aria-labelledby="rack-home">
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">6</span>
-            <div class="unit">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">ISP gateway</span>
-                <span class="unit-desc">Router and Wi-Fi. Behind carrier-grade NAT, so nothing is port-forwarded.</span>
-              </span>
-            </div>
-          </li>
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">4–5</span>
-            <a class="unit unit-2u" href="projects/home-server.html">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">home server</span>
-                <span class="unit-desc">HP EliteDesk 800 G6, Core i7, 32&nbsp;GB. RHEL&nbsp;10, Docker, KVM, Caddy, Pi-hole, Jellyfin, Seafile, Frigate.</span>
-              </span>
-              <span class="unit-more">Build notes</span>
-            </a>
-          </li>
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">3</span>
-            <a class="unit" href="projects/home-server.html">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">8&nbsp;TB Barracuda</span>
-                <span class="unit-desc">USB enclosure. Media, file sync data, VM disks.</span>
-              </span>
-              <span class="unit-more">Build notes</span>
-            </a>
-          </li>
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">2</span>
-            <a class="unit" href="projects/plant-monitor.html">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">plant monitor</span>
-                <span class="unit-desc">ESP32-C3, four soil sensors and an auto-watering pump.</span>
-              </span>
-              <span class="unit-more">Build notes</span>
-            </a>
-          </li>
-        </ol>
+      <aside class="spec" aria-labelledby="spec-title">
+        <div class="spec-head">
+          <h2 id="spec-title">Home lab</h2>
+          <span class="spec-status"><span class="spec-dot" aria-hidden="true"></span>Running since 2023</span>
+        </div>
+        <dl class="spec-list">
+          <div><dt>Server</dt><dd><a href="projects/home-server.html">HP EliteDesk 800 G6</a>, Core i7, 32&nbsp;GB</dd></div>
+          <div><dt>OS</dt><dd>RHEL&nbsp;10</dd></div>
+          <div><dt>Services</dt><dd>Docker, KVM, Caddy, Pi-hole, Jellyfin, Seafile, Frigate</dd></div>
+          <div><dt>Storage</dt><dd>8&nbsp;TB USB enclosure: media, file sync, VM disks</dd></div>
+          <div><dt>M365 lab</dt><dd>Windows 11 VM with nested Hyper-V: Windows Server 2022 + Windows 11 client</dd></div>
+          <div><dt>Network</dt><dd>Behind carrier-grade NAT, nothing port-forwarded</dd></div>
+          <div><dt>IoT</dt><dd><a href="projects/plant-monitor.html">Plant monitor</a>: ESP32-C3, four soil sensors, auto-watering pump</dd></div>
+        </dl>
 
-        <p class="tunnel">Remote maintenance over Tailscale</p>
+        <h3 class="spec-sub">Built and maintained for a friend</h3>
+        <dl class="spec-list">
+          <div><dt>NVR</dt><dd><a href="projects/frigate-nvr.html">Raspberry Pi&nbsp;5 + Hailo-8L</a>, Frigate</dd></div>
+          <div><dt>Cameras</dt><dd>Reolink outdoor, alerts filtered by zone</dd></div>
+          <div><dt>Access</dt><dd>Remote maintenance over Tailscale</dd></div>
+        </dl>
 
-        <p class="rack-title" id="rack-remote">Built and maintained for a friend</p>
-        <ol class="rack" aria-labelledby="rack-remote">
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">2</span>
-            <a class="unit" href="projects/frigate-nvr.html">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">NVR Pi</span>
-                <span class="unit-desc">Raspberry Pi&nbsp;5 with a Hailo-8L accelerator. Frigate NVR.</span>
-              </span>
-              <span class="unit-more">Build notes</span>
-            </a>
-          </li>
-          <li class="unit-slot">
-            <span class="u-num" aria-hidden="true">1</span>
-            <a class="unit" href="projects/frigate-nvr.html#pi">
-              <span class="led" aria-hidden="true"></span>
-              <span class="unit-body">
-                <span class="tape">Reolink cameras</span>
-                <span class="unit-desc">Outdoor cameras, alerts filtered by zone.</span>
-              </span>
-            </a>
-          </li>
-        </ol>
-        <p class="rack-caption">My equipment, and the system I maintain for a friend, drawn as a rack. Select a unit to read about it.</p>
-      </div>
+        <a class="spec-foot" href="#projects">See all projects &rarr;</a>
+      </aside>
     </div>
   </section>
 
